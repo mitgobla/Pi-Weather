@@ -1,6 +1,6 @@
 import os
 
-rom papirus import PapirusComposite
+from papirus import PapirusComposite
 from weather import Weather, Unit
 
 directory_path = os.path.dirname(os.path.realpath(__file__))
