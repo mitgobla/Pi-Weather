@@ -10,6 +10,7 @@ if len(argv) > 1:
 else:
     LOCATION = 'London'
 
+print(LOCATION)
 directory_path = os.path.dirname(os.path.realpath(__file__))
 
 ink_display = PapirusComposite(False)
