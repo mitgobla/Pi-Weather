@@ -109,19 +109,20 @@ def main():
             DIRECTORY, 'images', 'weather', str(forecast[4].code)+'.png'))
         INK_DISPLAY.UpdateImg("ForecastIconSix", os.path.join(
             DIRECTORY, 'images', 'weather', str(forecast[5].code)+'.png'))
-    INK_DISPLAY.WriteAll()
-    sleep(20)
-    INK_DISPLAY.UpdateText(
-        "TextLineTwo", "Hi: "+forecast[0].high+"°"+lookup.units.temperature+"  Lo: "+forecast[0].low+"°"+lookup.units.temperature)
-    INK_DISPLAY.UpdateText("TextLineThree", wind_speed +
-                           " "+wind_direction_degrees+"°")
-    INK_DISPLAY.WriteAll()
-    sleep(20)
-    INK_DISPLAY.UpdateText("TextLineTwo", title)
-    INK_DISPLAY.UpdateText("TextLineThree", lookup.last_build_date[5:-4])
+        INK_DISPLAY.WriteAll()
+        sleep(20)
+        INK_DISPLAY.UpdateText(
+            "TextLineTwo", "Hi: "+forecast[0].high+"°"+lookup.units.temperature+"  Lo: "+forecast[0].low+"°"+lookup.units.temperature)
+        INK_DISPLAY.UpdateText("TextLineThree", wind_speed +
+                            " "+wind_direction_degrees+"°")
+        INK_DISPLAY.WriteAll()
+        sleep(20)
+        INK_DISPLAY.UpdateText("TextLineTwo", title)
+        INK_DISPLAY.UpdateText("TextLineThree", lookup.last_build_date[5:-4])
     INK_DISPLAY.WriteAll()
     sleep(20)
 
 
 while True:
     main()
+    FIRST_ITERATION = False
