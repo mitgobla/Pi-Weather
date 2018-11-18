@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
+from sys import argv
 from time import sleep
 from papirus import PapirusComposite
 from weather import Weather, Unit
+
+if len(argv) > 1:
+    LOCATION = str(argv[1])
+else:
+    LOCATION = 'London'
 
 directory_path = os.path.dirname(os.path.realpath(__file__))
 
