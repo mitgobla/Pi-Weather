@@ -20,7 +20,7 @@ compass_dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
 
 while True:
     weather = Weather(unit=Unit.CELSIUS)
-    lookup = weather.lookup_by_location('llandysul')
+    lookup = weather.lookup_by_location(LOCATION)
 
     sunrise = lookup.astronomy.sunrise
     sunset = lookup.astronomy.sunset
