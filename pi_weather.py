@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import os
 from sys import argv
 from time import sleep
@@ -18,6 +19,26 @@ COMPASS_DIRS = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
                 "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
 
 
+def convert24(time, meridiem):
+    """Convert hour to 24 hour format
+
+    Arguments:
+        time {list} -- Array of Hour, Minute
+        meridiem {str} -- String of meridiem
+
+    Returns:
+        int -- 24 Hour format of hour
+    """
+
+    if meridiem == 'am' and time[0] == '12':
+        return 0
+    elif meridiem == 'am':
+        return int(time[0])
+    elif meridiem == 'pm' and time[0] == '12':
+        return int(time[0])
+    return int(time[0])+12
+
+
 def main():
     """Weather Monitoring System
     """
@@ -29,13 +50,29 @@ def main():
         print("Invalid Location")
         exit()
 
+    current_hour = datetime.datetime.now().hour
+    current_minute = datetime.datetime.now().minute
+    current_time = "%s:%s" % current_hour, current_minute
+
     title = lookup.title.split(' - ')[-1]
 
     sunrise = lookup.astronomy.sunrise
+    sunrise_meridiem = sunrise.split(' ')[-1]
+    sunrise_time = sunrise.split(' ')[0].split(':')
+    sunrise_hour = convert24(sunrise_time, sunrise_meridiem)
+    sunrise_minute = int(sunrise_time[1])
+    sunrise_time_24 = str(sunrise_hour)+":"+str(sunrise_minute)
+
     sunset = lookup.astronomy.sunset
+    sunset_meridiem = sunset.split(' ')[-1]
+    sunset_time = sunset.split(' ')[0].split(':')
+    sunset_hour = convert24(sunset_time, sunset_meridiem)
+    sunset_minute = int(sunset_time[1])
+    sunset_time_24 = str(sunset_hour)+":"+str(sunset_minute)
 
     visibility = lookup.atmosphere.visibility+lookup.units.distance
     pressure = lookup.atmosphere.pressure+lookup.units.pressure
+
     wind_speed = lookup.wind.speed+lookup.units.speed
     wind_direction_degrees = lookup.wind.direction
     ix = int((int(wind_direction_degrees) + 11.25)/22.5 - 0.02)
@@ -43,19 +80,21 @@ def main():
 
     humidity = str(lookup.atmosphere.humidity)+"%"
     temperature = lookup.condition.temp+"°"+lookup.units.temperature
+
     weather_type = lookup.condition.text
     weather_code = lookup.condition.code
+
     forecast = lookup.forecast
 
     if FIRST_ITERATION:
         INK_DISPLAY.AddImg(os.path.join(DIRECTORY, 'images', 'weather', str(
             weather_code)+'.png'), 0, 0, (48, 48), Id="WeatherIcon")
-        INK_DISPLAY.AddText(weather_type, 48, 0, size=15, Id="TextLineOne",
+        INK_DISPLAY.AddText(weather_type, 48, 0, size=16, Id="TextLineOne",
                             fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
         INK_DISPLAY.AddText(temperature+"    "+humidity, 48,
-                            16, size=12, Id="TextLineTwo")
+                            24, size=12, Id="TextLineTwo")
         INK_DISPLAY.AddText(wind_speed+"  "+wind_direction_compass,
-                            48, 32, size=12, Id="TextLineThree")
+                            48, 36, size=12, Id="TextLineThree")
 
         INK_DISPLAY.AddText(forecast[0].day, 3, 49,
                             size=12, Id="ForecastDayOne")
@@ -114,7 +153,7 @@ def main():
         INK_DISPLAY.UpdateText(
             "TextLineTwo", "Hi: "+forecast[0].high+"°"+lookup.units.temperature+"  Lo: "+forecast[0].low+"°"+lookup.units.temperature)
         INK_DISPLAY.UpdateText("TextLineThree", wind_speed +
-                            " "+wind_direction_degrees+"°")
+                               " "+wind_direction_degrees+"°")
         INK_DISPLAY.WriteAll()
         sleep(20)
         INK_DISPLAY.UpdateText("TextLineTwo", title)
