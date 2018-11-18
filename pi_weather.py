@@ -33,10 +33,10 @@ while True:
     if first_iteration:
         ink_display.AddImg(os.path.join(directory_path, 'images', 'weather', str(
             weather_code)+'.png'), 0, 0, (48, 48), Id="WeatherIcon")
-        ink_display.AddText(weather_type, 48, 0, size=16, Id="WeatherText")
+        ink_display.AddText(weather_type, 48, 0, size=15, Id="WeatherText", fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
         ink_display.AddText(temperature+"    "+humidity, 48,
-                            16, size=16, Id="TempHumdText")
-        ink_display.AddText(wind_speed+"  "+wind_direction_compass+" ("+wind_direction_degrees+"°)", 48, 32, size=16, Id="WindText")
+                            16, size=15, Id="TempHumdText")
+        ink_display.AddText(wind_speed+"  "+wind_direction_compass+" ("+wind_direction_degrees+"°)", 48, 32, size=13, Id="WindText")
     else:
         ink_display.UpdateImg("WeatherIcon", os.path.join(
             directory_path, 'images', 'weather', str(weather_code)+'.png'))
