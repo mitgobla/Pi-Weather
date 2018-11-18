@@ -89,12 +89,12 @@ def main():
     if FIRST_ITERATION:
         INK_DISPLAY.AddImg(os.path.join(DIRECTORY, 'images', 'weather', str(
             weather_code)+'.png'), 0, 0, (48, 48), Id="WeatherIcon")
-        INK_DISPLAY.AddText(weather_type, 48, 0, size=16, Id="TextLineOne",
+        INK_DISPLAY.AddText(weather_type, 48, 0, size=17, Id="TextLineOne",
                             fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
         INK_DISPLAY.AddText(temperature+"    "+humidity, 48,
-                            24, size=12, Id="TextLineTwo")
+                            20, size=13, Id="TextLineTwo")
         INK_DISPLAY.AddText(wind_speed+"  "+wind_direction_compass,
-                            48, 36, size=12, Id="TextLineThree")
+                            48, 34, size=13, Id="TextLineThree")
 
         INK_DISPLAY.AddText(forecast[0].day, 3, 49,
                             size=12, Id="ForecastDayOne")
