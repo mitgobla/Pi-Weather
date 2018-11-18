@@ -22,7 +22,8 @@ while True:
     pressure = lookup.atmosphere.pressure+lookup.units.pressure
     wind_speed = lookup.wind.speed+lookup.units.speed
     wind_direction_degrees = lookup.wind.direction
-    wind_direction_compass = compass_dirs[int((wind_direction_degrees+11.25)/22.5 - 0.02) % 16]
+    ix = int((int(wind_direction_degrees) + 11.25)/22.5 - 0.02)
+    wind_direction_compass = compass_dirs[ix % 16]
 
     humidity = str(lookup.atmosphere.humidity)+"%"
     temperature = lookup.condition.temp+"°"+lookup.units.temperature
