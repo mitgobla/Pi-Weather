@@ -52,7 +52,7 @@ def main():
 
     current_hour = datetime.datetime.now().hour
     current_minute = datetime.datetime.now().minute
-    current_time = "%s:%s" % current_hour, current_minute
+    current_time = "%s:%s" % (current_hour, current_minute)
 
     title = lookup.title.split(' - ')[-1]
 
