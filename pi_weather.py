@@ -38,13 +38,21 @@ def convert24(time, meridiem):
         return int(time[0])
     return int(time[0])+12
 
+WEATHER = Weather(unit=Unit.CELSIUS)
 
 def main():
     """Weather Monitoring System
     """
 
-    weather = Weather(unit=Unit.CELSIUS)
-    lookup = weather.lookup_by_location(LOCATION)
+    gotWeather = False
+    while not gotWeather:
+        try:
+            lookup = WEATHER.lookup_by_location(LOCATION)
+            gotWeather = True
+        except: # Connection Error
+            sleep(60)
+            continue
+
 
     if not lookup:
         print("Invalid Location")
