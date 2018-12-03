@@ -64,19 +64,19 @@ def main():
 
     title = lookup.title.split(' - ')[-1]
 
-    sunrise = lookup.astronomy.sunrise
-    sunrise_meridiem = sunrise.split(' ')[-1]
-    sunrise_time = sunrise.split(' ')[0].split(':')
-    sunrise_hour = convert24(sunrise_time, sunrise_meridiem)
-    sunrise_minute = int(sunrise_time[1])
-    sunrise_time_24 = str(sunrise_hour)+":"+str(sunrise_minute)
+    # sunrise = lookup.astronomy.sunrise
+    # sunrise_meridiem = sunrise.split(' ')[-1]
+    # sunrise_time = sunrise.split(' ')[0].split(':')
+    # sunrise_hour = convert24(sunrise_time, sunrise_meridiem)
+    # sunrise_minute = int(sunrise_time[1])
+    # sunrise_time_24 = str(sunrise_hour)+":"+str(sunrise_minute)
 
-    sunset = lookup.astronomy.sunset
-    sunset_meridiem = sunset.split(' ')[-1]
-    sunset_time = sunset.split(' ')[0].split(':')
-    sunset_hour = convert24(sunset_time, sunset_meridiem)
-    sunset_minute = int(sunset_time[1])
-    sunset_time_24 = str(sunset_hour)+":"+str(sunset_minute)
+    # sunset = lookup.astronomy.sunset
+    # sunset_meridiem = sunset.split(' ')[-1]
+    # sunset_time = sunset.split(' ')[0].split(':')
+    # sunset_hour = convert24(sunset_time, sunset_meridiem)
+    # sunset_minute = int(sunset_time[1])
+    # sunset_time_24 = str(sunset_hour)+":"+str(sunset_minute)
 
     visibility = lookup.atmosphere.visibility+lookup.units.distance
     pressure = lookup.atmosphere.pressure+lookup.units.pressure
