@@ -172,7 +172,7 @@ class PiDisplay(PiWeather):
                                  fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
             self.display.AddText("Loading...", 48, 20, size=12, Id="LineTwo")
             self.display.AddText("Loading...", 48, 34,
-                                 size=12, Id="Line Three")
+                                 size=12, Id="LineThree")
 
             if self.config["forecast"]["sixday"]:
                 self.display.AddText("...", 3, 49, size=12, Id="ForecastOne")
