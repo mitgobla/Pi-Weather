@@ -266,9 +266,9 @@ class PiDisplay(PiWeather):
                     DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][5].code)+'.png'))
             else:
                 self.display.UpdateText(
-                    "ForecastOne", "Today: "+self.lookup["forecast"][0].day)
+                    "ForecastOne", "Today: "+self.lookup["forecast"][0].text)
                 self.display.UpdateText(
-                    "ForecastTwo", "Tomorrow: "+self.lookup["forecast"][1].day)
+                    "ForecastTwo", "Tomorrow: "+self.lookup["forecast"][1].text)
 
                 self.display.UpdateImg("ForecastIconOne", os.path.join(
                     DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
