@@ -214,7 +214,7 @@ class PiDisplay(PiWeather):
                                  fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
             self.display.AddText("Loading...", 82, 15, size=12, Id="LineTwo")
             self.display.AddText("Loading...", 82, 30,
-                                 size=12, Id="Line Three")
+                                 size=12, Id="LineThree")
         self.display.WriteAll()
 
     def update(self):
