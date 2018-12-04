@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import datetime
 import json
 import os
 from sys import argv
@@ -10,6 +9,7 @@ from papirus import PapirusComposite
 from weather import Weather
 
 DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+
 
 class PiWeather:
 
@@ -24,9 +24,9 @@ class PiWeather:
         self.lookup = {}
 
         self.compass_dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
-                    "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+                             "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
         self.compass_dirs_simple = ["N", "NE", "NE", "NE", "E", "SE", "SE", "SE",
-                    "S", "SW", "SW", "SW", "W", "NW", "NW", "NW"]
+                                    "S", "SW", "SW", "SW", "W", "NW", "NW", "NW"]
 
     @staticmethod
     def load_config():
@@ -48,7 +48,7 @@ class PiWeather:
         return "London"
 
     def get_wind_direction(self, direction):
-        ix = int((int(direction)+ 11.25)/22.5 - 0.02)
+        ix = int((int(direction) + 11.25)/22.5 - 0.02)
         if self.config["wind_direction"] == "compass":
             return self.compass_dirs[ix % 16]
         elif self.config["wind_direction"] == "simplecompass":
@@ -121,36 +121,55 @@ class PiDisplay(PiWeather):
 
     def initalize_display(self):
         if self.config["forecast"]["enabled"]:
-            self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 0, 0, (48, 48), Id="WeatherIcon")
-            self.display.AddText("Loading...", 48, 0, size=13, Id="LineOne", fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
+            self.display.AddImg(os.path.join(
+                DIRECTORY, 'images', 'weather', self.unknown_icon), 0, 0, (48, 48), Id="WeatherIcon")
+            self.display.AddText("Loading...", 48, 0, size=13, Id="LineOne",
+                                 fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
             self.display.AddText("Loading...", 48, 20, size=12, Id="LineTwo")
-            self.display.AddText("Loading...", 48, 34, size=12, Id="Line Three")
+            self.display.AddText("Loading...", 48, 34,
+                                 size=12, Id="Line Three")
 
             if self.config["forecast"]["sixday"]:
                 self.display.AddText("...", 3, 49, size=12, Id="ForecastOne")
                 self.display.AddText("...", 35, 49, size=12, Id="ForecastTwo")
-                self.display.AddText("...", 68, 49, size=12, Id="ForecastThree")
-                self.display.AddText("...", 101, 49, size=12, Id="ForecastFour")
-                self.display.AddText("...", 135, 49, size=12, Id="ForecastFive")
+                self.display.AddText(
+                    "...", 68, 49, size=12, Id="ForecastThree")
+                self.display.AddText(
+                    "...", 101, 49, size=12, Id="ForecastFour")
+                self.display.AddText(
+                    "...", 135, 49, size=12, Id="ForecastFive")
                 self.display.AddText("...", 167, 49, size=12, Id="ForecastSix")
 
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 63, (32, 32), Id="ForecastIconOne")
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 34, 63, (32, 32), Id="ForecastIconTwo")
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 67, 63, (32, 32), Id="ForecastIconThree")
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 100, 63, (32, 32), Id="ForecastIconFour")
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 133, 63, (32, 32), Id="ForecastIconFive")
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 166, 63, (32, 32), Id="ForecastIconSix")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 63, (32, 32), Id="ForecastIconOne")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 34, 63, (32, 32), Id="ForecastIconTwo")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 67, 63, (32, 32), Id="ForecastIconThree")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 100, 63, (32, 32), Id="ForecastIconFour")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 133, 63, (32, 32), Id="ForecastIconFive")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 166, 63, (32, 32), Id="ForecastIconSix")
             else:
-                self.display.AddText("Today: ...", 25, 51, size=12, Id="ForecastOne")
-                self.display.AddText("Tomorrow: ...", 25, 74, size=12, Id="ForecastTwo")
+                self.display.AddText("Today: ...", 25, 51,
+                                     size=12, Id="ForecastOne")
+                self.display.AddText("Tomorrow: ...", 25,
+                                     74, size=12, Id="ForecastTwo")
 
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 49, (23, 23), Id="ForecastIconOne")
-                self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 72, (23, 23), Id="ForecastIconTwo")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 49, (23, 23), Id="ForecastIconOne")
+                self.display.AddImg(os.path.join(
+                    DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 72, (23, 23), Id="ForecastIconTwo")
         else:
-            self.display.AddImg(os.path.join(DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 15, (80, 80), Id="WeatherIcon")
-            self.display.AddText("Loading...", 1, 1, size=13, Id="LineOne", fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
+            self.display.AddImg(os.path.join(
+                DIRECTORY, 'images', 'weather', self.unknown_icon), 1, 15, (80, 80), Id="WeatherIcon")
+            self.display.AddText("Loading...", 1, 1, size=13, Id="LineOne",
+                                 fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
             self.display.AddText("Loading...", 82, 15, size=12, Id="LineTwo")
-            self.display.AddText("Loading...", 82, 30, size=12, Id="Line Three")
+            self.display.AddText("Loading...", 82, 30,
+                                 size=12, Id="Line Three")
         self.display.WriteAll()
 
     def update(self):
@@ -166,37 +185,56 @@ class PiDisplay(PiWeather):
             print("Invalid Location")
             exit()
 
-        self.display.UpdateImg("WeatherIcon", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["weather_code"])+'.png'))
+        self.display.UpdateImg("WeatherIcon", os.path.join(
+            DIRECTORY, 'images', 'weather', str(self.lookup["weather_code"])+'.png'))
         self.display.UpdateText("LineOne", self.lookup["weather_type"])
 
         if self.config["forecast"]["enabled"]:
             if self.config["forecast"]["sixday"]:
-                self.display.UpdateText("ForecastOne", self.lookup["forecast"][0].day)
-                self.display.UpdateText("ForecastTwo", self.lookup["forecast"][1].day)
-                self.display.UpdateText("ForecastThree", self.lookup["forecast"][2].day)
-                self.display.UpdateText("ForecastFour", self.lookup["forecast"][3].day)
-                self.display.UpdateText("ForecastFive", self.lookup["forecast"][4].day)
-                self.display.UpdateText("ForecastSix", self.lookup["forecast"][5].day)
+                self.display.UpdateText(
+                    "ForecastOne", self.lookup["forecast"][0].day)
+                self.display.UpdateText(
+                    "ForecastTwo", self.lookup["forecast"][1].day)
+                self.display.UpdateText(
+                    "ForecastThree", self.lookup["forecast"][2].day)
+                self.display.UpdateText(
+                    "ForecastFour", self.lookup["forecast"][3].day)
+                self.display.UpdateText(
+                    "ForecastFive", self.lookup["forecast"][4].day)
+                self.display.UpdateText(
+                    "ForecastSix", self.lookup["forecast"][5].day)
 
-                self.display.UpdateImg("ForecastIconOne", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
-                self.display.UpdateImg("ForecastIconTwo", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][1].code)+'.png'))
-                self.display.UpdateImg("ForecastIconThree", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][2].code)+'.png'))
-                self.display.UpdateImg("ForecastIconFour", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][3].code)+'.png'))
-                self.display.UpdateImg("ForecastIconFive", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][4].code)+'.png'))
-                self.display.UpdateImg("ForecastIconSix", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][5].code)+'.png'))
+                self.display.UpdateImg("ForecastIconOne", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
+                self.display.UpdateImg("ForecastIconTwo", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][1].code)+'.png'))
+                self.display.UpdateImg("ForecastIconThree", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][2].code)+'.png'))
+                self.display.UpdateImg("ForecastIconFour", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][3].code)+'.png'))
+                self.display.UpdateImg("ForecastIconFive", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][4].code)+'.png'))
+                self.display.UpdateImg("ForecastIconSix", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][5].code)+'.png'))
             else:
-                self.display.UpdateText("ForecastOne", "Today: "+self.lookup["forecast"][0].day)
-                self.display.UpdateText("ForecastTwo", "Tomorrow: "+self.lookup["forecast"][1].day)
+                self.display.UpdateText(
+                    "ForecastOne", "Today: "+self.lookup["forecast"][0].day)
+                self.display.UpdateText(
+                    "ForecastTwo", "Tomorrow: "+self.lookup["forecast"][1].day)
 
-                self.display.UpdateImg("ForecastIconOne", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
-                self.display.UpdateImg("ForecastIconTwo", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][1].code)+'.png'))
+                self.display.UpdateImg("ForecastIconOne", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
+                self.display.UpdateImg("ForecastIconTwo", os.path.join(
+                    DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][1].code)+'.png'))
 
-        for slide, stat in enumerate(self.order):
+        for stat in self.order:
             if stat == "temperature":
                 self.display.UpdateText("LineTwo", "Temp: "+self.lookup[stat])
-                self.display.UpdateText("LineThree", "Hi: "+self.lookup["forecast"][0].high+" Lo: "+self.lookup["forecast"][0].low)
+                self.display.UpdateText(
+                    "LineThree", "Hi: "+self.lookup["forecast"][0].high+" Lo: "+self.lookup["forecast"][0].low)
             elif stat == "humidity":
-                self.display.UpdateText("LineTwo", "Humidity: "+self.lookup[stat])
+                self.display.UpdateText(
+                    "LineTwo", "Humidity: "+self.lookup[stat])
                 humidity = int(self.lookup[stat][:-1])
                 scale = ""
                 if humidity < 25:
@@ -209,8 +247,10 @@ class PiDisplay(PiWeather):
                     scale = "Very Wet"
                 self.display.UpdateText("LineThree", scale)
             elif stat == "wind":
-                self.display.UpdateText("LineTwo", "Speed: "+self.lookup[stat]["speed"])
-                self.display.UpdateText("LineThree", "Direction: "+self.lookup[stat]["direction"])
+                self.display.UpdateText(
+                    "LineTwo", "Speed: "+self.lookup[stat]["speed"])
+                self.display.UpdateText(
+                    "LineThree", "Direction: "+self.lookup[stat]["direction"])
             elif stat == "pressure":
                 self.display.UpdateText("LineTwo", "Pressure")
                 self.display.UpdateText("LineThree", self.lookup[stat])
@@ -231,6 +271,7 @@ class PiDisplay(PiWeather):
                 sleep(int(60/len(self.order)))
             # Can only request weather data every 43 seconds (2000 calls a day)
             # 20 seconds per slide is safe
+
 
 PI = PiDisplay()
 
