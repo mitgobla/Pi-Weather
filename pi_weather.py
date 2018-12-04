@@ -30,15 +30,33 @@ class PiWeather:
 
     @staticmethod
     def load_config():
+        """Load PiWeather Config
+
+        Returns:
+            dict -- Dictonary of config options
+        """
+
         with open(os.path.join(DIRECTORY, 'config.json')) as config_file:
             return json.load(config_file)
 
     def get_unit(self):
+        """Read the selected temperature unit from config
+
+        Returns:
+            str -- String of unit in lowercase
+        """
+
         if "unit" in self.config:
             return self.config["unit"].lower()
         return "c"
 
     def get_location(self):
+        """Read the location set in the config
+
+        Returns:
+            str -- String of the location
+        """
+
         if len(argv) > 1:
             return str(argv[1])
 
@@ -48,6 +66,15 @@ class PiWeather:
         return "London"
 
     def get_wind_direction(self, direction):
+        """Converts the direction from degrees to compass
+
+        Arguments:
+            direction {int} -- Direction in degrees
+
+        Returns:
+            str -- Compass/Degrees direction depending on config
+        """
+
         ix = int((int(direction) + 11.25)/22.5 - 0.02)
         if self.config["wind_direction"] == "compass":
             return self.compass_dirs[ix % 16]
@@ -76,6 +103,15 @@ class PiWeather:
         return int(time[0])+12
 
     def get_suntime(self, suntime):
+        """Convert sunrise/set to 24 hour
+
+        Arguments:
+            suntime {str} -- String of time in 'HH:MM pm' format
+
+        Returns:
+            str -- Returns HH:MM in 24 format
+        """
+
         meridiem = suntime.split(' ')[-1]
         suntime = suntime.split(' ')[0].split(':')
         sun_hour = self.convert24(suntime, meridiem)
@@ -83,6 +119,9 @@ class PiWeather:
         return str(sun_hour)+":"+str(sun_minute)
 
     def get_weather(self):
+        """Get weather and populate lookup dictonary
+        """
+
         lookup_data = self.weather.lookup_by_location(self.location)
         self.lookup = {
             "temperature": lookup_data.condition.temp+"°"+lookup_data.units.temperature,
@@ -115,11 +154,17 @@ class PiDisplay(PiWeather):
         self.initalize_display()
 
     def initalize_order(self):
+        """Create the order that information is displayed
+        """
+
         for stat in self.config["stats"]:
             if self.config["stats"][stat]:
                 self.order.append(stat)
 
     def initalize_display(self):
+        """Add all the screen elements to the e-ink display
+        """
+
         if self.config["forecast"]["enabled"]:
             self.display.AddImg(os.path.join(
                 DIRECTORY, 'images', 'weather', self.unknown_icon), 0, 0, (48, 48), Id="WeatherIcon")
@@ -173,6 +218,9 @@ class PiDisplay(PiWeather):
         self.display.WriteAll()
 
     def update(self):
+        """Regurlarly update the screen with new information
+        """
+
         self.gotWeather = False
         while not self.gotWeather:
             try:
@@ -271,7 +319,6 @@ class PiDisplay(PiWeather):
                 sleep(int(60/len(self.order)))
             # Can only request weather data every 43 seconds (2000 calls a day)
             # 20 seconds per slide is safe
-
 
 PI = PiDisplay()
 
