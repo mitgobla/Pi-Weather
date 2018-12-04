@@ -2,13 +2,11 @@
     "weather": {
         "unit": "C",
         "location": "London",
+        "wind_direction": "compass",
         "stats": {
             "temperature": true,
             "humidity": true,
-            "wind": {
-                "enabled": true,
-                "direction": "compass"
-            },
+            "wind": true,
             "pressure": false,
             "visibility": false,
             "sunrise": false,

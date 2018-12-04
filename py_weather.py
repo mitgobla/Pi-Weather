@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import datetime
 import json
@@ -12,11 +13,6 @@ DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
 class PiWeather:
 
-    compass_dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
-                "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
-    compass_dirs_simple = ["N", "NE", "NE", "NE", "E", "SE", "SE", "SE",
-                "S", "SW", "SW", "SW", "W", "NW", "NW", "NW"]
-
     def __init__(self):
         self.config = self.load_config()["weather"]
 
@@ -26,6 +22,11 @@ class PiWeather:
         self.location = self.get_location()
 
         self.lookup = {}
+
+        self.compass_dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+                    "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+        self.compass_dirs_simple = ["N", "NE", "NE", "NE", "E", "SE", "SE", "SE",
+                    "S", "SW", "SW", "SW", "W", "NW", "NW", "NW"]
 
     @staticmethod
     def load_config():
@@ -48,10 +49,10 @@ class PiWeather:
 
     def get_wind_direction(self, direction):
         ix = int((int(direction)+ 11.25)/22.5 - 0.02)
-        if self.config["wind"]["direction"] == "compass":
-            return compass_dirs[ix % 16]
-        elif self.config["wind"]["direction"] == "simplecompass":
-            return compass_dirs_simple[ix % 16]
+        if self.config["wind_direction"] == "compass":
+            return self.compass_dirs[ix % 16]
+        elif self.config["wind_direction"] == "simplecompass":
+            return self.compass_dirs_simple[ix % 16]
         return direction
 
     @staticmethod
@@ -93,7 +94,7 @@ class PiWeather:
             "pressure": lookup_data.atmosphere.pressure+lookup_data.units.pressure,
             "visibility": lookup_data.atmosphere.visibility+lookup_data.units.distance,
             "sunrise": self.get_suntime(lookup_data.astronomy.sunrise),
-            "sunrise": self.get_suntime(lookup_data.astronomy.sunset),
+            "sunset": self.get_suntime(lookup_data.astronomy.sunset),
             "weather_type": lookup_data.condition.text,
             "weather_code": lookup_data.condition.code,
             "forecast": lookup_data.forecast
@@ -115,7 +116,8 @@ class PiDisplay(PiWeather):
 
     def initalize_order(self):
         for stat in self.config["stats"]:
-            self.order.append(stat)
+            if self.config["stats"][stat]:
+                self.order.append(stat)
 
     def initalize_display(self):
         if self.config["forecast"]["enabled"]:
@@ -149,6 +151,7 @@ class PiDisplay(PiWeather):
             self.display.AddText("Loading...", 1, 1, size=13, Id="LineOne", fontPath='/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf')
             self.display.AddText("Loading...", 82, 15, size=12, Id="LineTwo")
             self.display.AddText("Loading...", 82, 30, size=12, Id="Line Three")
+        self.display.WriteAll()
 
     def update(self):
         self.gotWeather = False
@@ -187,4 +190,45 @@ class PiDisplay(PiWeather):
 
                 self.display.UpdateImg("ForecastIconOne", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
                 self.display.UpdateImg("ForecastIconTwo", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][1].code)+'.png'))
+        
+        for slide, stat in enumerate(self.order):
+            if stat == "temperature":
+                self.display.UpdateText("LineTwo", "Temp: "+self.lookup[stat])
+                self.display.UpdateText("LineThree", "Hi: "+self.lookup["forecast"][0].high+" Lo: "+self.lookup["forecast"][0].low)
+            elif stat == "humidity":
+                self.display.UpdateText("LineTwo", "Humidity: "+self.lookup[stat])
+                humidity = int(self.lookup[stat][:-1])
+                scale = ""
+                if humidity < 25:
+                    scale = "Very Dry"
+                elif humidity < 60:
+                    scale = "Dry"
+                elif humidity < 80:
+                    scale = "Wet"
+                else:
+                    scale = "Very Wet"
+                self.display.UpdateText("LineThree", scale)
+            elif stat == "wind":
+                self.display.UpdateText("LineTwo", "Speed: "+self.lookup[stat]["speed"])
+                self.display.UpdateText("LineThree", "Direction: "+self.lookup[stat]["direction"])
+            elif stat == "pressure":
+                self.display.UpdateText("LineTwo", "Pressure")
+                self.display.UpdateText("LineThree", self.lookup[stat])
+            elif stat == "visibility":
+                self.display.UpdateText("LineTwo", "Visibility")
+                self.display.UpdateText("LineThree", self.lookup[stat])
+            elif stat == "sunrise":
+                self.display.UpdateText("LineTwo", "Sunrise")
+                self.display.UpdateText("LineThree", self.lookup[stat])
+            elif stat == "sunset":
+                self.display.UpdateText("LineTwo", "Sunset")
+                self.display.UpdateText("LineThree", self.lookup[stat])
+            
+            self.display.WriteAll()
+            if len(self.order) >= 3:
+                sleep(20)
+            else:
+                sleep(int(60/len(self.order)))
+            # Can only request weather data every 43 seconds (2000 calls a day)
+            # 20 seconds per slide is safe
 
