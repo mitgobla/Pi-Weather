@@ -190,7 +190,7 @@ class PiDisplay(PiWeather):
 
                 self.display.UpdateImg("ForecastIconOne", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][0].code)+'.png'))
                 self.display.UpdateImg("ForecastIconTwo", os.path.join(DIRECTORY, 'images', 'weather', str(self.lookup["forecast"][1].code)+'.png'))
-        
+
         for slide, stat in enumerate(self.order):
             if stat == "temperature":
                 self.display.UpdateText("LineTwo", "Temp: "+self.lookup[stat])
@@ -223,7 +223,7 @@ class PiDisplay(PiWeather):
             elif stat == "sunset":
                 self.display.UpdateText("LineTwo", "Sunset")
                 self.display.UpdateText("LineThree", self.lookup[stat])
-            
+
             self.display.WriteAll()
             if len(self.order) >= 3:
                 sleep(20)
@@ -232,3 +232,8 @@ class PiDisplay(PiWeather):
             # Can only request weather data every 43 seconds (2000 calls a day)
             # 20 seconds per slide is safe
 
+PI = PiDisplay()
+
+if __name__ == "__main__":
+    while True:
+        PI.update()
